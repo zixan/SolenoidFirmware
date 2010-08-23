@@ -47,6 +47,8 @@ SimplePacket masterPacket(rs485_tx);
 void handle_query();
 void send_reply();
 
+char sl_val = 0;
+
 //initialize the firmware to default state.
 void init_commands()
 {
@@ -279,17 +281,22 @@ void handle_query()
   //WORKING
   case SLAVE_CMD_SET_SERVO_1_POS:
 #ifdef HAS_SERVOS
-  digitalWrite(13,HIGH);
-    servo1.attach(9);
-    servo1.write(masterPacket.get_8(2));
-#endif
-    break;
-
-  //WORKING
-  case SLAVE_CMD_SET_SERVO_2_POS:
-#ifdef HAS_SERVOS
-    servo2.attach(10);
-    servo2.write(masterPacket.get_8(2));
+    digitalWrite(13,HIGH);
+    //servo1.attach(9);
+    //servo1.write(masterPacket.get_8(2));
+    digitalWrite(9,~sl_val);
+    // /*
+    pinMode(10, INPUT); 
+    if (digitalRead(10) == HIGH) {      
+      digitalWrite(9, HIGH); 
+      delay(10000);  
+      digitalWrite(9, LOW);
+    } else {   
+      digitalWrite(9, LOW);
+      delay(1000);
+      digitalWrite(9, HIGH);
+    }
+    // */
 #endif
     break;
 
